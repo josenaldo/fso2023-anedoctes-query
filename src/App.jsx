@@ -5,10 +5,10 @@ import { useDispatch } from 'react-redux'
 import { setAlert, ALERT_TYPES } from '@/reducers/alertReducer'
 
 import Alert from '@/components/Alert'
-import AnecdoteForm from '@/components/AnedoctForm'
+import AnecdoteForm from '@/components/AnecdoteForm'
 import './App.css'
 
-import { getAnedoctes } from '@/requests/anedoctesRequests'
+import { getAnecdotes } from '@/requests/anecdotesRequests'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -18,21 +18,31 @@ const App = () => {
     dispatch(
       setAlert({
         type: ALERT_TYPES.INFO,
-        message: 'Anedocte voted!',
-        details: `You voted for the anedocte '${anecdote.content}' !`,
+        message: 'Anecdote voted!',
+        details: `You voted for the anecdote '${anecdote.content}' !`,
       })
     )
   }
 
-  const result = useQuery('anedoctes', getAnedoctes, {
+  const result = useQuery('anecdotes', getAnecdotes, {
     refetchOnWindowFocus: false,
+    retry: 1,
   })
 
   if (result.isLoading) {
-    return <div>Loading...</div>
+    return <article aria-busy="true">Loading...</article>
+  }
+
+  if (result.isError) {
+    return (
+      <article>
+        Anecdote service not available due to problems in server
+      </article>
+    )
   }
 
   const anecdotes = result.data
+
   return (
     <div className="container">
       <main>
@@ -43,7 +53,7 @@ const App = () => {
 
         {anecdotes.map((anecdote) => (
           <article key={anecdote.id}>
-            <div className="anedocte">
+            <div className="anecdote">
               <span>{anecdote.content}</span>
               <button
                 className="card small"
