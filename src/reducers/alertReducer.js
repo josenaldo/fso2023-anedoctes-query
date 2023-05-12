@@ -1,8 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 const NO_ALERT_STATE = {
-  message: null,
   type: null,
+  message: null,
+  details: null,
+  error: null,
   timeoutId: null,
 }
 
@@ -17,7 +19,13 @@ const ALERT_TYPES = {
 const setAlert = createAsyncThunk(
   'alert/setAlert',
   async (
-    { message, type = ALERT_TYPES.INFO, timeoutInSeconds = ALERT_TIMEOUT },
+    {
+      type = ALERT_TYPES.INFO,
+      message,
+      details = null,
+      error = null,
+      timeoutInSeconds = ALERT_TIMEOUT,
+    },
     thunkAPI
   ) => {
     const { dispatch, getState } = thunkAPI
@@ -34,6 +42,8 @@ const setAlert = createAsyncThunk(
     return {
       message: message,
       type: type,
+      details: details,
+      error: error,
       timeoutId: timeoutId,
     }
   }
