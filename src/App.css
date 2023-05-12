@@ -1,0 +1,22 @@
+@import url('./styles/root.css');
+@import url('./styles/links.css');
+@import url('./styles/buttons.css');
+@import url('./styles/icons.css');
+
+main {
+  margin-top: 60px;
+}
+
+.anedocte {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.votes {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
