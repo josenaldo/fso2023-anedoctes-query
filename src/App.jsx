@@ -1,30 +1,16 @@
 import React from 'react'
 
 import { useQuery } from 'react-query'
-import { useDispatch } from 'react-redux'
-import { setAlert } from '@/reducers/alertReducer'
-import { ALERT_TYPES } from '@/constants'
-
-import Alert from '@/components/Alert'
-import AnecdoteForm from '@/components/AnecdoteForm'
-import './App.css'
 
 import { getAnecdotes } from '@/requests/anecdotesRequests'
 
+import Alert from '@/components/Alert'
+import AnecdoteForm from '@/components/AnecdoteForm'
+import Anecdote from '@/components/Anecdote'
+
+import './App.css'
+
 const App = () => {
-  const dispatch = useDispatch()
-
-  const handleVote = (anecdote) => {
-    console.log('vote: ', anecdote)
-    dispatch(
-      setAlert({
-        type: ALERT_TYPES.INFO,
-        message: 'Anecdote voted!',
-        details: `You voted for the anecdote '${anecdote.content}' !`,
-      })
-    )
-  }
-
   const result = useQuery('anecdotes', getAnecdotes, {
     refetchOnWindowFocus: false,
     retry: 1,
@@ -42,7 +28,7 @@ const App = () => {
     )
   }
 
-  const anecdotes = result.data
+  const anecdotes = result.data.sort((a, b) => b.votes - a.votes)
 
   return (
     <div className="container">
@@ -50,27 +36,11 @@ const App = () => {
         <h3>Anecdote app</h3>
 
         <Alert />
+
         <AnecdoteForm />
 
         {anecdotes.map((anecdote) => (
-          <article key={anecdote.id}>
-            <div className="anecdote">
-              <span>{anecdote.content}</span>
-              <button
-                className="card small"
-                onClick={() => handleVote(anecdote)}
-              >
-                <span className="material-icons">thumb_up_alt</span>
-                <span>Vote</span>
-              </button>
-            </div>
-            <footer>
-              <span className="votes">
-                <span className="material-icons">thumb_up_alt</span>{' '}
-                {anecdote.votes}{' '}
-              </span>
-            </footer>
-          </article>
+          <Anecdote anecdote={anecdote} key={anecdote.id} />
         ))}
       </main>
     </div>
