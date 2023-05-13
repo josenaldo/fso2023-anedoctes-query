@@ -1,10 +1,7 @@
 import { combineReducers } from 'redux'
 import { configureStore } from '@reduxjs/toolkit'
-import alertReducer, {
-  setAlert,
-  ALERT_TYPES,
-  removeAlert,
-} from '@/reducers/alertReducer'
+import alertReducer, { setAlert, removeAlert } from '@/reducers/alertReducer'
+import { ALERT_TYPES } from '@/constants'
 
 const rootReducer = combineReducers({
   alert: alertReducer,

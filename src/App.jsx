@@ -2,7 +2,8 @@ import React from 'react'
 
 import { useQuery } from 'react-query'
 import { useDispatch } from 'react-redux'
-import { setAlert, ALERT_TYPES } from '@/reducers/alertReducer'
+import { setAlert } from '@/reducers/alertReducer'
+import { ALERT_TYPES } from '@/constants'
 
 import Alert from '@/components/Alert'
 import AnecdoteForm from '@/components/AnecdoteForm'
