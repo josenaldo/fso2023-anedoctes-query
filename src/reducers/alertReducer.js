@@ -13,6 +13,19 @@ const NO_ALERT_STATE = {
 const ALERT_TIMEOUT = 5
 const ERROR_ALERT_TIMEOUT = 15
 
+/**
+ * Sets an alert with the given type, message, and optional details.
+ *
+ * @async
+ * @function setAlert
+ * @param {Object} payload - The alert payload.
+ * @param {string} payload.type - The type of the alert.
+ * @param {string} payload.message - The message to display in the alert.
+ * @param {string} [payload.details] - Optional details to display in the alert.
+ * @param {Error} [payload.error] - Optional error object to include in the alert.
+ * @param {number} [payload.timeoutInSeconds=5] - Optional timeout in seconds for the alert.
+ * @returns {Promise<Object>} A promise that resolves with the alert object when the alert has been set.
+ */
 const setAlert = createAsyncThunk(
   'alert/setAlert',
   async (
@@ -46,6 +59,18 @@ const setAlert = createAsyncThunk(
   }
 )
 
+/**
+ * Sets an error alert with the given message, optional details, and error object.
+ *
+ * @async
+ * @function setErrorAlert
+ * @param {Object} payload - The alert payload.
+ * @param {string} payload.message - The message to display in the alert.
+ * @param {string} [payload.details] - Optional details to display in the alert.
+ * @param {Error} payload.error - The error object to include in the alert.
+ * @param {number} [payload.timeoutInSeconds=15] - Optional timeout in seconds for the alert.
+ * @returns {Promise<Object>} A promise that resolves with the alert object when the alert has been set.
+ */
 const setErrorAlert = createAsyncThunk(
   'alert/setErrorAlert',
   async (
@@ -70,10 +95,29 @@ const setErrorAlert = createAsyncThunk(
   }
 )
 
+/**
+ * Redux slice for managing alerts.
+ *
+ * @typedef {Object} AlertState
+ * @property {string} message - The message to display in the alert.
+ * @property {string} type - The type of the alert (e.g. 'info', 'warning', 'error').
+ * @property {string} [details] - Optional details to display in the alert.
+ * @property {Error} [error] - Optional error object to include in the alert.
+ * @property {number} [timeoutId] - Optional ID of the timeout for the alert.
+ *
+ * @type {import('@reduxjs/toolkit').Slice<AlertState>}
+ */
 const alertSlice = createSlice({
   name: 'alert',
   initialState: NO_ALERT_STATE,
   reducers: {
+    /**
+     * Action creator for removing the current alert.
+     *
+     * @function removeAlert
+     * @param {AlertState} state - The current alert state.
+     * @returns {Object} The action object to dispatch.
+     */
     removeAlert: (state) => {
       clearTimeout(state.timeoutId)
       return NO_ALERT_STATE
