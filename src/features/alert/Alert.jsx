@@ -49,7 +49,7 @@ const Alert = () => {
       className={`${styles.alert} ${selectAlertType(alert.type)}`}
       role="alert"
     >
-      <span className={styles.closeButton} onClick={close}>
+      <span className={styles.closeButton} onClick={close} role="button">
         &times;
       </span>
 

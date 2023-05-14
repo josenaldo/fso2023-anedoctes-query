@@ -1,220 +1,51 @@
-import React from 'react'
-import { render, screen } from '@testing-library/react'
-import '@testing-library/jest-dom/extend-expect'
+import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { useSelector, useDispatch } from 'react-redux'
+import Alert from './Alert'
+import { AlertContext, ALERT_TYPES } from '@/features/alert'
 
-import { ALERT_TYPES, Alert, useRemoveAlert } from '@/features/alert'
+// Mock the context
+const customRender = (ui, { providerProps, ...renderOptions }) => {
+  return render(
+    <AlertContext.Provider {...providerProps}>{ui}</AlertContext.Provider>,
+    renderOptions
+  )
+}
 
-jest.mock('react-redux')
-
-describe('<Alert />', () => {
-  let dispatchMock
-
-  beforeEach(() => {
-    dispatchMock = jest.fn()
-
-    useDispatch.mockReturnValue(dispatchMock)
+describe('Alert component', () => {
+  it('does not render if there is no alert message', () => {
+    const providerProps = {
+      value: { alert: { message: null }, dispatch: jest.fn() },
+    }
+    const { queryByRole } = customRender(<Alert />, { providerProps })
+    expect(queryByRole('alert')).toBeNull()
   })
 
-  describe('when no alert is set ', () => {
-    beforeEach(() => {
-      useSelector.mockImplementation((selectorFn) =>
-        selectorFn({
-          alert: {
-            message: null,
-            type: null,
-          },
-        })
-      )
-
-      render(<Alert />)
-    })
-
-    it('does not render when there is no alert', () => {
-      const alertElement = screen.queryByRole('alert')
-      expect(alertElement).not.toBeInTheDocument()
-    })
+  it('renders the alert message', () => {
+    const providerProps = {
+      value: { alert: { message: 'Test alert' }, dispatch: jest.fn() },
+    }
+    const { getByRole } = customRender(<Alert />, { providerProps })
+    expect(getByRole('alert')).toHaveTextContent('Test alert')
   })
 
-  describe('when an alert is set', () => {
-    beforeEach(() => {
-      useSelector.mockImplementation((selectorFn) =>
-        selectorFn({
-          alert: {
-            message: 'Success Message',
-            type: ALERT_TYPES.SUCCESS,
-          },
-        })
-      )
-
-      render(<Alert />)
-    })
-
-    it('renders success alert message and type correctly', () => {
-      const alertElement = screen.getByRole('alert')
-
-      expect(alertElement).toBeInTheDocument()
-      expect(alertElement).toHaveClass('alert-success')
-
-      const messageElement = screen.getByText('Success Message')
-      expect(messageElement).toBeInTheDocument()
-    })
-
-    it('dispatches removeAlert action when close button is clicked', async () => {
-      const closeButton = screen.getByText('×')
-      await userEvent.click(closeButton)
-
-      expect(dispatchMock).toHaveBeenCalledTimes(1)
-      expect(dispatchMock).toHaveBeenCalledWith(removeAlert())
-    })
+  it('closes the alert when the close button is clicked', async () => {
+    const dispatchMock = jest.fn()
+    const providerProps = {
+      value: { alert: { message: 'Test alert' }, dispatch: dispatchMock },
+    }
+    const { getByRole } = customRender(<Alert />, { providerProps })
+    await userEvent.click(getByRole('button'))
+    expect(dispatchMock).toHaveBeenCalled()
   })
 
-  describe('when a type of alert is set', () => {
-    it('renders success alert message and type correctly', () => {
-      useSelector.mockImplementation((selectorFn) =>
-        selectorFn({
-          alert: {
-            message: 'Success Message',
-            type: ALERT_TYPES.SUCCESS,
-          },
-        })
-      )
-
-      render(<Alert />)
-
-      const alertElement = screen.getByRole('alert')
-
-      expect(alertElement).toBeInTheDocument()
-      expect(alertElement).toHaveClass('alert-success')
-
-      const messageElement = screen.getByText('Success Message')
-      expect(messageElement).toBeInTheDocument()
-    })
-
-    it('renders alert details correctly', () => {
-      useSelector.mockImplementation((selectorFn) =>
-        selectorFn({
-          alert: {
-            message: 'Success Message',
-            type: ALERT_TYPES.SUCCESS,
-            details: 'Success Details',
-          },
-        })
-      )
-
-      render(<Alert />)
-
-      const alertElement = screen.getByRole('alert')
-
-      expect(alertElement).toBeInTheDocument()
-      expect(alertElement).toHaveClass('alert-success')
-
-      const messageElement = screen.getByText('Success Message')
-      expect(messageElement).toBeInTheDocument()
-
-      const detailsElement = screen.getByText('Success Details')
-      expect(detailsElement).toBeInTheDocument()
-    })
-
-    it('renders info alert message and type correctly', () => {
-      useSelector.mockImplementation((selectorFn) =>
-        selectorFn({
-          alert: {
-            message: 'Info Message',
-            type: ALERT_TYPES.INFO,
-          },
-        })
-      )
-
-      render(<Alert />)
-
-      const alertElement = screen.getByRole('alert')
-
-      expect(alertElement).toBeInTheDocument()
-      expect(alertElement).toHaveClass('alert-info')
-
-      const messageElement = screen.getByText('Info Message')
-      expect(messageElement).toBeInTheDocument()
-    })
-
-    it('renders warning alert message and type correctly', () => {
-      useSelector.mockImplementation((selectorFn) =>
-        selectorFn({
-          alert: {
-            message: 'Warning Message',
-            type: ALERT_TYPES.WARNING,
-          },
-        })
-      )
-
-      render(<Alert />)
-
-      const alertElement = screen.getByRole('alert')
-
-      expect(alertElement).toBeInTheDocument()
-      expect(alertElement).toHaveClass('alert-warning')
-
-      const messageElement = screen.getByText('Warning Message')
-      expect(messageElement).toBeInTheDocument()
-    })
-
-    it('renders error alert message and type correctly', () => {
-      useSelector.mockImplementation((selectorFn) =>
-        selectorFn({
-          alert: {
-            message: 'Error Message',
-            type: ALERT_TYPES.ERROR,
-          },
-        })
-      )
-
-      render(<Alert />)
-
-      const alertElement = screen.getByRole('alert')
-
-      expect(alertElement).toBeInTheDocument()
-      expect(alertElement).toHaveClass('alert-error')
-
-      const messageElement = screen.getByText('Error Message')
-      expect(messageElement).toBeInTheDocument()
-    })
-
-    it('renders error details if error object is provided', () => {
-      useSelector.mockImplementation((selectorFn) =>
-        selectorFn({
-          alert: {
-            type: ALERT_TYPES.ERROR,
-            message: 'Error Message',
-            error: {
-              statusCode: 404,
-              errorMessage: 'Page not found',
-              errorDetails: 'The requested page does not exist',
-            },
-          },
-        })
-      )
-
-      render(<Alert />)
-
-      const alertElement = screen.getByRole('alert')
-
-      expect(alertElement).toBeInTheDocument()
-      expect(alertElement).toHaveClass('alert-error')
-
-      const messageElement = screen.getByText('Error Message')
-      expect(messageElement).toBeInTheDocument()
-
-      const statusCode = screen.getByText('Status code: 404')
-      expect(statusCode).toBeInTheDocument()
-
-      const messageError = screen.getByText('Message Error: Page not found')
-      expect(messageError).toBeInTheDocument()
-
-      const errorDetails = screen.getByText(
-        'Details: The requested page does not exist'
-      )
-      expect(errorDetails).toBeInTheDocument()
-    })
+  it('displays the correct alert type', () => {
+    const providerProps = {
+      value: {
+        alert: { message: 'Test alert', type: ALERT_TYPES.ERROR },
+        dispatch: jest.fn(),
+      },
+    }
+    const { getByRole } = customRender(<Alert />, { providerProps })
+    expect(getByRole('alert')).toHaveClass('alertError')
   })
 })

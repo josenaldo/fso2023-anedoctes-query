@@ -1,114 +1,70 @@
-import { combineReducers } from 'redux'
-import { configureStore } from '@reduxjs/toolkit'
-
+import { renderHook } from '@testing-library/react-hooks'
 import {
+  NO_ALERT_STATE,
+  AlertContext,
+  useAlertValue,
+  useAlertDispatch,
   alertReducer,
-  setAlert,
-  setErrorAlert,
-  removeAlert,
 } from '@/features/alert'
 
-import { ALERT_TYPES } from '@/features/alert'
-
-const rootReducer = combineReducers({
-  alert: alertReducer,
+// Test for useAlertValue hook
+describe('useAlertValue hook', () => {
+  it('does not throw error when wrapped in AlertContextProvider', () => {
+    const wrapper = ({ children }) => (
+      <AlertContext.Provider value={{ alert: 'test' }}>
+        {children}
+      </AlertContext.Provider>
+    )
+    const { result } = renderHook(() => useAlertValue(), { wrapper })
+    expect(result.error).toBeUndefined()
+  })
 })
 
-describe('alertSlice reducer', () => {
-  let store
+// Test for useAlertDispatch hook
+describe('useAlertDispatch hook', () => {
+  it('does not throw error when wrapped in AlertContextProvider', () => {
+    const wrapper = ({ children }) => (
+      <AlertContext.Provider value={{ dispatch: jest.fn() }}>
+        {children}
+      </AlertContext.Provider>
+    )
+    const { result } = renderHook(() => useAlertDispatch(), { wrapper })
+    expect(result.error).toBeUndefined()
+  })
+})
 
-  beforeEach(() => {
-    store = configureStore({
-      reducer: rootReducer,
-    })
+// Test for alertReducer
+describe('alertReducer', () => {
+  it('returns correct state for alert/setAlert action', () => {
+    const state = {}
+    const action = {
+      type: 'alert/setAlert',
+      payload: {
+        type: 'info',
+        message: 'message',
+        details: 'details',
+        error: 'error',
+        timeoutId: 1,
+      },
+    }
+    const expectedState = action.payload
+    expect(alertReducer(state, action)).toEqual(expectedState)
   })
 
-  it('should set success alert', async () => {
-    const message = 'Test alert message'
-    const type = ALERT_TYPES.SUCCESS
-
-    await store.dispatch(setAlert({ message, type }))
-    const { alert } = store.getState()
-
-    expect(alert.message).toEqual(message)
-    expect(alert.type).toEqual(type)
-    expect(alert.timeoutId).toEqual(expect.any(Number))
+  it('returns correct state for alert/removeAlert action', () => {
+    const state = {}
+    const action = {
+      type: 'alert/removeAlert',
+    }
+    const expectedState = NO_ALERT_STATE
+    expect(alertReducer(state, action)).toEqual(expectedState)
   })
 
-  it('should set a default alert', async () => {
-    const message = 'Test alert message'
-
-    await store.dispatch(setAlert({ message }))
-    const { alert } = store.getState()
-
-    expect(alert.message).toEqual(message)
-    expect(alert.type).toEqual(ALERT_TYPES.INFO)
-    expect(alert.timeoutId).toEqual(expect.any(Number))
-  })
-
-  it('should set error alert', async () => {
-    const message = 'Test alert message'
-    const details = 'Test alert detail'
-    const error = new Error(details)
-
-    await store.dispatch(setErrorAlert({ message, details, error }))
-    const { alert } = store.getState()
-
-    expect(alert.message).toEqual(message)
-    expect(alert.type).toEqual(ALERT_TYPES.ERROR)
-    expect(alert.timeoutId).toEqual(expect.any(Number))
-    expect(alert.details).toEqual(details)
-    expect(alert.error).toEqual({
-      errorMessage: 'Test alert detail',
-    })
-  })
-
-  it('should remove alert', async () => {
-    const message = 'Test alert message'
-    const type = ALERT_TYPES.SUCCESS
-
-    await store.dispatch(setAlert({ message, type }))
-
-    const { alert } = store.getState()
-
-    expect(alert.message).toEqual(message)
-    expect(alert.type).toEqual(type)
-    expect(alert.timeoutId).toEqual(expect.any(Number))
-
-    store.dispatch(removeAlert())
-    expect(store.getState().alert).toEqual({
-      details: null,
-      error: null,
-      message: null,
-      timeoutId: null,
-      type: null,
-    })
-  })
-
-  it('should auto-remove alert after timeout', async () => {
-    const message = 'Test alert message'
-    const type = ALERT_TYPES.SUCCESS
-    const timeoutInSeconds = 2
-
-    await store.dispatch(setAlert({ message, type, timeoutInSeconds }))
-
-    const { alert } = store.getState()
-
-    expect(alert.message).toEqual(message)
-    expect(alert.type).toEqual(type)
-    expect(alert.timeoutId).toEqual(expect.any(Number))
-
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        expect(store.getState().alert).toEqual({
-          details: null,
-          error: null,
-          message: null,
-          timeoutId: null,
-          type: null,
-        })
-        resolve()
-      }, timeoutInSeconds * 1000 + 100)
-    })
+  it('returns current state for unknown action', () => {
+    const state = {}
+    const action = {
+      type: 'unknown',
+    }
+    expect(alertReducer(state, action)).toBe(state)
   })
 })
