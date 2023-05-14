@@ -4,7 +4,7 @@ import '@testing-library/jest-dom/extend-expect'
 import userEvent from '@testing-library/user-event'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { ALERT_TYPES, Alert, removeAlert } from '@/features/alert'
+import { ALERT_TYPES, Alert, useRemoveAlert } from '@/features/alert'
 
 jest.mock('react-redux')
 

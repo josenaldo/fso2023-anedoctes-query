@@ -1,14 +1,20 @@
-import { useDispatch } from 'react-redux'
 import { useMutation, useQueryClient } from 'react-query'
 
 import { updateAnecdote } from '@/features/anecdote'
-import { ALERT_TYPES, setAlert, setErrorAlert } from '@/features/alert'
+import {
+  ALERT_TYPES,
+  useSetAlert,
+  useSetErrorAlert,
+  useAlertDispatch,
+} from '@/features/alert'
 
 import styles from './Anecdote.module.css'
 
 const Anedocte = ({ anecdote }) => {
-  const dispatch = useDispatch()
+  const dispatch = useAlertDispatch()
   const queryClient = useQueryClient()
+  const setAlert = useSetAlert()
+  const setErrorAlert = useSetErrorAlert()
 
   const updateAnecdoteMutation = useMutation(updateAnecdote, {
     onSuccess: (updatedAnecdote) => {
@@ -36,6 +42,7 @@ const Anedocte = ({ anecdote }) => {
         type: ALERT_TYPES.INFO,
         message: 'Anecdote voted!',
         details: `You voted for the anecdote '${anecdote.content}' !`,
+        dispatch,
       })
     )
   }

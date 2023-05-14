@@ -1,12 +1,18 @@
-import { useDispatch } from 'react-redux'
 import { useMutation, useQueryClient } from 'react-query'
 
 import { createAnecdote } from '@/features/anecdote'
-import { ALERT_TYPES, setAlert, setErrorAlert } from '@/features/alert'
+import {
+  ALERT_TYPES,
+  useSetAlert,
+  useSetErrorAlert,
+  useAlertDispatch,
+} from '@/features/alert'
 
 const AnecdoteForm = () => {
   const queryClient = useQueryClient()
-  const dispatch = useDispatch()
+  const dispatch = useAlertDispatch()
+  const setAlert = useSetAlert()
+  const setErrorAlert = useSetErrorAlert()
 
   const newAnecdoteMutation = useMutation({
     mutationFn: createAnecdote,

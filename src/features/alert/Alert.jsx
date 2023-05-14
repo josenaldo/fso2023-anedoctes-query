@@ -1,7 +1,12 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+// import { useDispatch, useSelector } from 'react-redux'
 
-import { ALERT_TYPES, removeAlert } from '@/features/alert'
+import {
+  ALERT_TYPES,
+  useAlertValue,
+  useAlertDispatch,
+  useRemoveAlert,
+} from '@/features/alert'
 
 import styles from './Alert.module.css'
 
@@ -19,8 +24,12 @@ const alertStyleMap = {
 }
 
 const Alert = () => {
-  const dispatch = useDispatch()
-  const alert = useSelector((state) => state.alert)
+  // const dispatch = useDispatch()
+  const dispatch = useAlertDispatch()
+  // const alert = useSelector((state) => state.alert)
+  const alert = useAlertValue()
+
+  const removeAlert = useRemoveAlert()
 
   const close = () => {
     dispatch(removeAlert())
@@ -32,7 +41,6 @@ const Alert = () => {
 
   const selectAlertType = (type) => {
     const alertType = alertStyleMap[type]
-
     return alertType
   }
 
