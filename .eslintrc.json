@@ -4,8 +4,7 @@
     "browser": true,
     "commonjs": true,
     "es2021": true,
-    "jest/globals": true,
-    "cypress/globals": true
+    "jest/globals": true
   },
   "extends": ["eslint:recommended", "plugin:react/recommended", "prettier"],
   "overrides": [],
@@ -13,7 +12,7 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["react", "jest", "cypress"],
+  "plugins": ["react", "jest"],
   "rules": {
     "indent": ["error", 2, { "SwitchCase": 1 }],
     "linebreak-style": ["error", "unix"],

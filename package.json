@@ -14,8 +14,6 @@
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --coverage",
     "test:coverage:all": "jest --coverage --collectCoverageFrom='./src/**'",
-    "test:e2e": "cypress run",
-    "cypress:open": "cypress open",
     "server": "node server"
   },
   "dependencies": {
@@ -42,10 +40,8 @@
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react": "^3.1.0",
     "babel-jest": "^29.5.0",
-    "cypress": "^12.8.1",
     "eslint": "^8.36.0",
     "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-jest": "^27.2.1",
     "eslint-plugin-react": "^7.32.2",
     "identity-obj-proxy": "^3.0.0",

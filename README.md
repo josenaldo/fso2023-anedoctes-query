@@ -119,18 +119,6 @@ Runs the Jest test runner on the source code files with `.test.js` and `.test.js
 yarn test:coverage
 ```
 
-Runs Cypress E2E tests, located in the `cypress` directory.
-
-```sh
-yarn test:e2e
-```
-
-Open the Cypress Test Runner.
-
-```sh
-yarn cypress:open
-```
-
 ## Technologies
 
 This project uses the following technologies:
@@ -165,15 +153,11 @@ This project uses the following technologies:
 - [@types/react-dom](https://www.npmjs.com/package/@types/react-dom)
   - TypeScript type definitions for React DOM.
 - [@vitejs/plugin-react](https://github.com/vitejs/vite/tree/main/packages/plugin-react)
-  - Vite plugin for using React in a Vite project.
-- [cypress](https://www.cypress.io/)
-  - A JavaScript end-to-end testing framework.
+  - Vite plugin for using React in a Vite project.s
 - [eslint](https://eslint.org/)
   - A pluggable and configurable linter tool for identifying and reporting patterns in JavaScript.
 - [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier)
   - A configuration for disabling ESLint rules that conflict with Prettier.
-- [eslint-plugin-cypress](https://github.com/cypress-io/eslint-plugin-cypress)
-  - ESLint rules for Cypress.
 - [eslint-plugin-jest](https://github.com/jest-community/eslint-plugin-jest)
   - ESLint plugin for Jest.
 - [eslint-plugin-react](https://github.com/yannickcr/eslint-plugin-react)

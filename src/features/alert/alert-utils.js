@@ -1,4 +1,4 @@
-import { ALERT_TYPES } from '@/constants'
+import { ALERT_TYPES } from '@/features/alert'
 
 export const HTTP_STATUS = {
   NOT_FOUND: 404,
@@ -11,10 +11,6 @@ export const ERROR_CODES = {
 }
 
 export const createErrorDetails = (statusCode, errorMessage, errorDetails) => {
-  console.log('🔴 statusCode', statusCode)
-  console.log('🔴 errorMessage', errorMessage)
-  console.log('🔴 errorDetails', errorDetails)
-
   let details = {}
 
   if (statusCode) {

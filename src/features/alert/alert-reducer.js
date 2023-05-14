@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { ALERT_TYPES } from '@/constants'
-import { handleAxiosError } from '@/utils/ErrorUtils'
+
+import { ALERT_TYPES } from '@/features/alert'
+import { handleAxiosError } from './alert-utils'
 
 const NO_ALERT_STATE = {
   type: null,
@@ -11,6 +12,7 @@ const NO_ALERT_STATE = {
 }
 
 const ALERT_TIMEOUT = 5
+
 const ERROR_ALERT_TIMEOUT = 15
 
 /**
@@ -133,6 +135,6 @@ const alertSlice = createSlice({
   },
 })
 
-export { ALERT_TYPES, setAlert, setErrorAlert }
+export { setAlert, setErrorAlert }
 export const { removeAlert } = alertSlice.actions
 export default alertSlice.reducer

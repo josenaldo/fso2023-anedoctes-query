@@ -2,15 +2,11 @@ import React from 'react'
 
 import { useQuery } from 'react-query'
 
-import { getAnecdotes } from '@/requests/anecdotesRequests'
+import { Anecdote, AnecdoteForm, getAnecdotes } from '@/features/anecdote'
 
-import Alert from '@/components/Alert'
-import AnecdoteForm from '@/components/AnecdoteForm'
-import Anecdote from '@/components/Anecdote'
+import { Alert } from '@/features/alert'
 
-import './App.css'
-
-const App = () => {
+const IndexPage = () => {
   const result = useQuery('anecdotes', getAnecdotes, {
     refetchOnWindowFocus: false,
     retry: 1,
@@ -47,4 +43,4 @@ const App = () => {
   )
 }
 
-export default App
+export default IndexPage

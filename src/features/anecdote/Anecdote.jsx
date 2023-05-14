@@ -1,8 +1,10 @@
 import { useDispatch } from 'react-redux'
 import { useMutation, useQueryClient } from 'react-query'
-import { setAlert, setErrorAlert } from '@/reducers/alertReducer'
-import { ALERT_TYPES } from '@/constants'
-import { updateAnecdote } from '@/requests/anecdotesRequests'
+
+import { updateAnecdote } from '@/features/anecdote'
+import { ALERT_TYPES, setAlert, setErrorAlert } from '@/features/alert'
+
+import styles from './Anecdote.module.css'
 
 const Anedocte = ({ anecdote }) => {
   const dispatch = useDispatch()
@@ -40,7 +42,7 @@ const Anedocte = ({ anecdote }) => {
 
   return (
     <article key={anecdote.id}>
-      <div className="anecdote">
+      <div className={styles.anecdote}>
         <span>{anecdote.content}</span>
         <button className="card small" onClick={() => handleVote(anecdote)}>
           <span className="material-icons">thumb_up_alt</span>
@@ -48,7 +50,7 @@ const Anedocte = ({ anecdote }) => {
         </button>
       </div>
       <footer>
-        <span className="votes">
+        <span className={styles.votes}>
           <span className="material-icons">thumb_up_alt</span> {anecdote.votes}
         </span>
       </footer>

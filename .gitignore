@@ -28,10 +28,7 @@ dist-ssr
 /.pnp
 .pnp.js
 
-# testing
-/coverage
-/cypress/videos
-/cypress/screenshots
+
 
 # production
 /build

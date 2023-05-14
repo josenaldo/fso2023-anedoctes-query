@@ -1,11 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import counterReducer from '@/reducers/counterReducer'
-import alertReducer from '@/reducers/alertReducer'
+import { alertReducer } from '@/features/alert'
 
 const store = configureStore({
   reducer: {
-    counter: counterReducer,
     alert: alertReducer,
   },
 })

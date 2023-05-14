@@ -3,9 +3,8 @@ import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import userEvent from '@testing-library/user-event'
 import { useSelector, useDispatch } from 'react-redux'
-import Alert from '@/components/Alert'
-import { removeAlert } from '@/reducers/alertReducer'
-import { ALERT_TYPES } from '@/constants'
+
+import { ALERT_TYPES, Alert, removeAlert } from '@/features/alert'
 
 jest.mock('react-redux')
 

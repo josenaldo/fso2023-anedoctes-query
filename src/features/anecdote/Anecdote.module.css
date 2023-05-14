@@ -1,12 +1,3 @@
-@import url('./styles/root.css');
-@import url('./styles/links.css');
-@import url('./styles/buttons.css');
-@import url('./styles/icons.css');
-
-main {
-  margin-top: 60px;
-}
-
 .anecdote {
   display: flex;
   flex-direction: row;
